@@ -1,0 +1,42 @@
+[
+    {
+        "user_id": "HjOiYj8qjoYOBPlp",
+        "firstname": "Adnan",
+        "lastname": "Khan",
+        "email": "adnan@code.com",
+        "password": "$2b$12$UVwKMfbX8.CKBljRcYFqautjTzRp/tX8peJqcPOWn2CJPTum5Pnpm",
+        "address": "Hyderabad",
+        "phone": "+91824726579",
+        "tasks": []
+    },
+    {
+        "user_id": "VLIqdr5ppngIOaOO",
+        "firstname": "Adnan",
+        "lastname": "Khan",
+        "email": "adnn@code.com",
+        "password": "$2b$12$rNU6IXtfGZVXsLecRGS5Nez5NFyap0CG/vBsgKREOZG/7bIy5qMzi",
+        "address": "Hyderabad",
+        "phone": "+918247579",
+        "tasks": []
+    },
+    {
+        "user_id": "jO2s6rhcWXXxZVHd",
+        "firstname": "Adnan",
+        "lastname": "Khan",
+        "email": "adnn@cod.com",
+        "password": "$2b$12$AWafJuTUoEe8MqzzL.Z92.hu0VsXxFOPI9/yTqv7LKIh5mzCgynpG",
+        "address": "Hyderabad",
+        "phone": "+9182475ssw79",
+        "tasks": []
+    },
+    {
+        "user_id": "XyrIbCGUnBhjOJLE",
+        "firstname": "Adnan",
+        "lastname": "Khan",
+        "email": "adnan@code.in",
+        "password": "$2b$12$qpKskd7ebjCaL/UAbcti8.NjA8BCQ7YsedDs.G.pcOZY007kz8vBO",
+        "address": "Hyderabad",
+        "phone": "+918245ssw79",
+        "tasks": []
+    }
+]
