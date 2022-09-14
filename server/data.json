@@ -37,6 +37,25 @@
         "password": "$2b$12$qpKskd7ebjCaL/UAbcti8.NjA8BCQ7YsedDs.G.pcOZY007kz8vBO",
         "address": "Hyderabad",
         "phone": "+918245ssw79",
-        "tasks": []
+        "tasks": [
+            {
+                "task_id": "UKDOdMlhvJQD",
+                "task_name": "complete my prs",
+                "deadline": "2022-09-15T13:10:54.000Z",
+                "isCompleted": false
+            },
+            {
+                "task_id": "t0nUZ92jbgyjfw",
+                "task_name": "complete my prs",
+                "deadline": "2022-10-02T13:10:54.000Z",
+                "isCompleted": false,
+                "reminders": [
+                    "2022-09-18T23:50:57.861Z",
+                    "2022-09-23T12:17:36.574Z",
+                    "2022-09-28T00:44:15.287Z",
+                    "2022-10-02T13:10:54.000Z"
+                ]
+            }
+        ]
     }
 ]
