@@ -6,6 +6,7 @@ import { scheduleJob, scheduledJobs, cancelJob } from "node-schedule";
 
 import randomString from "./randomString.js";
 
+
 const app = express();
 const port = 5000;
 
@@ -214,7 +215,7 @@ app.post("/api/task", async (req, res) => {
         // console.log(reminder3);
 
         reminders.push(reminder1, reminder2, reminder3, utc_deadline);
-        console.log(reminders);
+        // console.log(reminders);
 
 
         //Reading File Data
@@ -224,6 +225,7 @@ app.post("/api/task", async (req, res) => {
         let userFound = fileData.find((ele) => ele.user_id == payload.user_id)
         // console.log(userFound);
         let task_id = randomString(14)
+     
         let task_data = {
             task_id,
             task_name,
@@ -234,17 +236,24 @@ app.post("/api/task", async (req, res) => {
 
         task_data.reminders.forEach((ele, i) => {
             scheduleJob(`${task_id}_${i}`, ele, () => {
-                console.log(ele);
-                console.log("Reminder sent", i);
+
+                sendEmail({
+                    subject: "This is a Reminder", 
+                    to:userFound.email,
+                    html: `<p> Hi! this is reminder  ${i+1}  to complete the task ${task_name}
+
+                    <b>CFI Tasky Solution</b>
+                </p>`
+                })
+                // console.log(ele);
+                // console.log(`Hi ${userFound.firstname},
+                // This is a reminder  ${i+1} for Completing your task ${task_data.task_name}`, i);
                 console.log(new Date());
 
             })
 
         })
-        console.log(scheduledJobs);
-
-
-
+        // console.log(scheduledJobs);
         // console.log(task_data);
         userFound.tasks.push(task_data);
 
@@ -327,11 +336,6 @@ app.delete("/api/task/:task_id", async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 })
-
-
-
-
-
 
 app.listen(port, () => {
     console.log("Server Started at Port ", port);
