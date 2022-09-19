@@ -48,6 +48,7 @@ app.post("/api/signup", async (req, res) => {
         let fileData = await fs.readFile("data.json");
         fileData = JSON.parse(fileData);
 
+        
         // console.log(fileData);
         // console.log(email);
 
