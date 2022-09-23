@@ -5,7 +5,9 @@ import bcrypt from "bcrypt";
 import { scheduleJob, scheduledJobs, cancelJob } from "node-schedule";
 
 import randomString from "./randomString.js";
-
+// 
+import "./dbconnect.js";
+import userModel from "./data.js";
 
 const app = express();
 const port = 5000;
@@ -13,6 +15,11 @@ const port = 5000;
 
 //JSON Body Parser
 app.use(express.json())
+// 
+app.get("/", (req, res) => {
+    res.send("Server is up");
+
+})
 
 app.get("/", (req, res) => {
     res.status(200).json({ success: "Welcome To the Tasky Application" })
@@ -33,32 +40,36 @@ address
 
 app.post("/api/signup", async (req, res) => {
     try {
-        // console.log(req.body);
-        let { firstname, lastname, email, password, password2, address, phone } = req.body;
+        console.log(req.body);
+        // let { firstname, lastname, email, password, password2, address, phone } = req.body;
         // let body = req.body;
 
         //Basic Validations
-        if (!email || !firstname || !lastname || !phone || !address || !password || !password2) {
-            return res.status(400).json({ "error": "Some Fields Are Missing " });
-        }
-        if (password !== password2) {
-            return res.status(400).json({ "error": "Passwords are Not Same" });
-        }
+        // if (!email || !firstname || !lastname || !phone || !address || !password || !password2) {
+        // return res.status(400).json({ "error": "Some Fields Are Missing " });
+        // }
+        // if (password !== password2) {
+        // return res.status(400).json({ "error": "Passwords are Not Same" });
+        // }
         //Check Duplication of Email & Mobile
-        let fileData = await fs.readFile("data.json");
-        fileData = JSON.parse(fileData);
+        // let fileData = await fs.readFile("data.json");
+        // fileData = JSON.parse(fileData);
 
-        
+
+        req.body.password = await bcrypt.hash(req.body.password, 12);
+
+
         // console.log(fileData);
         // console.log(email);
 
-        let emailFound = fileData.find((ele) => ele.email == email)
+        // let emailFound = fileData.find((ele) => ele.email == email)
+        let emailFound = await userModel.findOne({ email: req.body.email });
         // console.log(emailFound);
         if (emailFound) {
             return res.status(409).json({ error: "User Email Already Registered. Please Login" });
         }
 
-        let phoneFound = fileData.find((ele) => ele.phone == phone)
+        let phoneFound = await userModel.findOne({ phone: req.body.phone });
         if (phoneFound) {
             return res.status(409).json({ error: "User Phone Already Registered. Please Login." })
         }
@@ -67,19 +78,14 @@ app.post("/api/signup", async (req, res) => {
         //     console.log(ele.email);
         // })
 
-        password = await bcrypt.hash(password, 12);
+        let userData = new userModel(req.body);
+        await userData.save();
 
-        //Generate a 12 Digit Random String for user_id
-
-        let user_id = randomString(16);
-        // console.log(user_id);
-        let userData = { user_id, firstname, lastname, email, password, address, phone };
-        userData.tasks = []
-        // userData.firstname = firstname;
-        // console.log(userData)
-        fileData.push(userData);
-        await fs.writeFile("data.json", JSON.stringify(fileData));
         res.status(200).json({ success: "User Signed Up Succesfully" });
+
+        // 
+        // let tasky_data = new taskyModel(req.body);
+        // await tasky_data.save();
 
     } catch (error) {
         console.error(error);
@@ -226,7 +232,7 @@ app.post("/api/task", async (req, res) => {
         let userFound = fileData.find((ele) => ele.user_id == payload.user_id)
         // console.log(userFound);
         let task_id = randomString(14)
-     
+
         let task_data = {
             task_id,
             task_name,
@@ -239,9 +245,9 @@ app.post("/api/task", async (req, res) => {
             scheduleJob(`${task_id}_${i}`, ele, () => {
 
                 sendEmail({
-                    subject: "This is a Reminder", 
-                    to:userFound.email,
-                    html: `<p> Hi! this is reminder  ${i+1}  to complete the task ${task_name}
+                    subject: "This is a Reminder",
+                    to: userFound.email,
+                    html: `<p> Hi! this is reminder  ${i + 1}  to complete the task ${task_name}
 
                     <b>CFI Tasky Solution</b>
                 </p>`
@@ -261,7 +267,7 @@ app.post("/api/task", async (req, res) => {
         // console.log(userFound);
         // console.log(fileData);
         await fs.writeFile("data.json", JSON.stringify(fileData));
-        res.status(200).json({ success: "Task was Added" })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Internal Server Error" })
@@ -273,7 +279,15 @@ End Point : /api/tasks
 Method : GET
 PRIVATE
 */
+app.get("/api/tasks", (req, res) => {
+    try {
+        res.status(200).json({ success: "Task was get" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 
+})
 
 
 /* 
