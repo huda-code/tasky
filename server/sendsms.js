@@ -22,4 +22,5 @@ async function sendsms (smsbody) {
         console.error(error)
     }
 }
-sendsms(sms);
+// sendsms(sms);
+export default sendsms;

@@ -10,4 +10,4 @@ function randomString(length) {
 }
 
 // console.log(randomString(5));
-export default randomString 
+export default randomString ;
