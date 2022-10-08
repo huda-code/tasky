@@ -128,7 +128,7 @@ app.post("/api/login", async (req, res) => {
     };
     let privatekey = "codeforindia";
     //GENERATE A TOKEN
-    const token = jwt.sign(payload, privatekey, { expiresIn: "7d" });
+    const token = jwt.sign(payload, privatekey, { expiresIn: "45d" });
     console.log(token);
     res.status(200).json({ success: "Login is Successful" });
   } catch (error) {
@@ -208,11 +208,11 @@ app.post("/api/task", async (req, res) => {
     };
     task_data.reminders.forEach((ele, i) => {
       // console.log(ele);
-      scheduleJob(`${task_id}_${i}`, ele, () => {
+      scheduleJob(`${ele.task_id}_${i}`, ele, () => {
         sendEmail({
           subject: "This is a  Reminder",
           to: userFound.email,
-          html: `<p>Hi ${userFound.firstname}, <br>
+          html: `<p> Hi ${userFound.firstname}, <br>
                     This is a Reminder - ${
                       i + 1
                     } to Complete your Task ${task_name} <br>
@@ -261,11 +261,11 @@ app.delete("/api/task/:task_id", async (req, res) => {
     let fileData = await fs.readFile("data.json");
     fileData = JSON.parse(fileData);
     let userFound = fileData.find((ele) => ele.user_id == payload.user_id);
-    let taskIndex = userFound.Tasks.findIndex((ele) => ele.task_id == task_id);
+    let taskIndex = userFound.tasks.findIndex((ele) => ele.task_id == task_id);
     if (taskIndex == -1) {
       return res.status(404).json({ error: "Task Not Found" });
     }
-    userFound.Tasks.splice(taskIndex, 1);
+    userFound.tasks.splice(taskIndex, 1);
     await fs.writeFile("data.json", JSON.stringify(fileData));
     res.status(200).json({ success: "Task Was Deleted Successfully" });
   } catch (error) {
@@ -282,7 +282,7 @@ app.get("/api/tasks", async (req, res) => {
   try {
     let user_id = req.params.user_id;
     console.log(user_id);
-    let token = req.header["auth-token"];
+    let token = req.headers["auth-token"];
     if (!token) {
       return res.status(401).json({ error: "Unauthorised Access" });
     }
@@ -299,6 +299,8 @@ app.get("/api/tasks", async (req, res) => {
     if (list[0] == -1) {
       return res.status(404).json({ error: "No Tasks Found" });
     }
+    else {
+      res.status(200).json({ success: "Task Added" });}
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -358,7 +360,7 @@ app.put("/api/task/:task_id", async (req, res) => {
     let fileData = await fs.readFile("data.json");
     fileData = JSON.parse(fileData);
     let userFound = fileData.find((ele) => ele.user_id == payload.user_id);
-    let taskIndex = userFound.Tasks.find((ele) => ele.task_id == task_id);
+    let taskIndex = userFound.tasks.find((ele) => ele.task_id == task_id);
     if (taskIndex == -1) {
       return res.status(404).json({ error: "Task Not Found" });
     }
@@ -390,7 +392,7 @@ app.put("/api/task/:task_id", async (req, res) => {
     // console.log(reminder3);
     reminders.push(reminder1, reminder2, reminder3, utc_deadline);
     console.log(reminders);
-    taskIndex.task_id = task_id;
+    taskIndex.task_id = ele.task_id;
     taskIndex.task_name = new_task_name;
     taskIndex.deadline = new_deadline;
     taskIndex.isCompleted = false;
@@ -398,7 +400,7 @@ app.put("/api/task/:task_id", async (req, res) => {
     taskIndex.reminders = reminders;
     taskIndex.reminders.forEach((ele, i) => {
       // console.log(ele);
-      scheduleJob(`${task_id}_${i}`, ele, () => {
+      scheduleJob(`${ele.task_id}_${i}`, ele, () => {
         sendEmail({
           subject: "This is a  Reminder",
           to: userFound.email,
