@@ -1,4 +1,4 @@
-Tasky - Task Manager
+Tasky -  The Task Manager
 Welcome to the Tasky repository! Tasky is a comprehensive task management application designed to help teams and individuals stay organized and on track. Built with the MERN stack (MongoDB, Express.js, React.js, and Node.js), it offers a user-friendly interface and robust features to manage tasks efficiently and ensure timely reminders.
 
 Features
