@@ -26,31 +26,26 @@ npm or yarn
 Installation
 Clone the repository:
 
-bash
-Copy code
+
 git clone https://github.com/huda-code/tasky.git
 Install dependencies for the server:
 
-bash
-Copy code
+
 cd server
 npm install
 Install dependencies for the client:
 
-bash
-Copy code
+
 cd ../client-app
 npm install
 Start the server:
 
-bash
-Copy code
+
 cd ../server
 npm start
 In a new terminal, start the client app:
 
-bash
-Copy code
+
 cd ../client-app
 npm start
 The client app will run on http://localhost:3000, and the server on http://localhost:5000.
